@@ -1,0 +1,2 @@
+include ':app', ':checkout'
+rootProject.name='Sample'
