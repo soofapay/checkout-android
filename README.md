@@ -1,6 +1,6 @@
 # Soofa Integration:
 
-![Alt text](https://github.com/soofapay/checkout-android/raw/master/sample-screenshot.jpg)
+![Alt text](https://github.com/soofapay/checkout-android/raw/master/sample-screenshot.jpg =320*480)
 
 
 Initiating soofa client
