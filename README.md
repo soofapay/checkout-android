@@ -1,5 +1,8 @@
 # Soofa Integration:
 
+![Alt text](https://github.com/soofapay/checkout-android/raw/master/sample-screenshot.pngraw=true "Title")
+
+
 Initiating soofa client
 
 ## Usage
