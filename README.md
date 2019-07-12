@@ -41,3 +41,12 @@ Domain -  the domain of the organization. To be added on allowed hosts from the 
 
   }
 ```
+
+## Description
+
+The result ```Soofa.TRANSACTION_SUCCESSFUL ```  means the transaction went through and the user has successfully made the payment. 
+The Extra data received is the transaction id, as ```"tid"``` and the reference as ```"reference"```.  
+Other responses include:
+*  ``` Soofa.TRANSACTION_FAILED ```  In cases where the transaction has failed because of bad data or network issues. Check log for more details.
+*  ``` Soofa.TRANSACTION_CANCELLED ```  In cases where the user has canceled the transaction.
+Both cases return a ``` "message" ``` .
