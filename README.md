@@ -31,20 +31,11 @@ Domain -  the domain of the organization. To be added on allowed hosts from the 
       if (requestCode == Soofa.TRANSACTION_REQUEST_CODE && data != null) {
           String message = data.getStringExtra("message");
 
-          switch (resultCode){
-             case Soofa.TRANSACTION_SUCCESSFUL:
-                  /**
-                   *The transaction is successful.
-                   *
-                   * Response includes the transaction id    {"tid"}
-                   * and the reference {"reference"}
-                   *
-                   * input your logic here
-                   * **/
+          if (resultCode==Soofa.TRANSACTION_SUCCESSFUL){
+            
                   String tId = data.getStringExtra("tid");
                   String reference = data.getStringExtra("reference");
                   Log.e(TAG, "onActivityResult: " + tId + " " + reference );
-                  break;
           }
       }
 
