@@ -2,7 +2,7 @@
 
 ![](https://github.com/soofapay/checkout-android/raw/master/sample-screenshot.jpg)
 
-# Library dependency
+## Library dependency
 
 To add the library, paste this line to your app-level build.gradle file.
 
