@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -44,6 +45,7 @@ import com.qubeans.checkout.models.TransactionResponse;
 import com.qubeans.checkout.utils.CardTextWatcher;
 import com.qubeans.checkout.utils.CheckoutUtils;
 import com.qubeans.checkout.utils.CreditCardExpiryTextWatcher;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,6 +56,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import cdflynn.android.library.checkview.CheckView;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -76,10 +79,12 @@ public class SoofaCheckout extends AppCompatActivity {
     TextView tvMobile, tvCard, tvWait;
     LinearLayout titleLayout;
     TextView instructions;
-    ProgressBar progressBar, mobileProgress;
+    AVLoadingIndicatorView progressBar;
+    AVLoadingIndicatorView mobileProgress;
     CardView mainCard;
     private static final String TAG  = "SOOFA";
-    View mobileView, cardView, stkView;
+    View mobileView, cardView, stkView,  successView;
+    CheckView checkView;
     TextView businessName;
     CountryCodePicker cpp;
     Button bPay;
@@ -117,6 +122,9 @@ public class SoofaCheckout extends AppCompatActivity {
         cardView = findViewById(com.qubeans.checkout.R.id.card_layout);
         stkView = findViewById(R.id.instructions_layout);
         titleLayout = findViewById(R.id.title_layout);
+        successView = findViewById(R.id.success_layout);
+
+        checkView = findViewById(R.id.check);
 
         instructions = findViewById(R.id.tv_instructions);
         checkTillResponse();
@@ -495,13 +503,19 @@ public class SoofaCheckout extends AppCompatActivity {
 
                                   case "TRANSACTION_SUCCESSFUL":
 
+                                      stkView.setVisibility(View.GONE);
+                                      successView.setVisibility(View.VISIBLE);
+                                      checkView.check();
                                       Log.e(TAG, "onResponse: " + transactionId );
                                       Intent intent = new Intent();
                                       intent.putExtra("tid", transactionId );
                                       intent.putExtra("reference", reference);
                                       setResult(Soofa.TRANSACTION_SUCCESSFUL, intent);
                                       cancel();
-                                      finish();
+                                     new Handler().postDelayed(() -> {
+                                         finish();
+                                     }, 2000);
+
                                       break;
 
                                   case "TRANSACTION_CANCELLED":
