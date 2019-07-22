@@ -45,7 +45,6 @@ import com.qubeans.checkout.models.TransactionResponse;
 import com.qubeans.checkout.utils.CardTextWatcher;
 import com.qubeans.checkout.utils.CheckoutUtils;
 import com.qubeans.checkout.utils.CreditCardExpiryTextWatcher;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,7 +58,6 @@ import java.util.concurrent.TimeUnit;
 import cdflynn.android.library.checkview.CheckView;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -79,8 +77,8 @@ public class SoofaCheckout extends AppCompatActivity {
     TextView tvMobile, tvCard, tvWait;
     LinearLayout titleLayout;
     TextView instructions;
-    AVLoadingIndicatorView progressBar;
-    AVLoadingIndicatorView mobileProgress;
+    ProgressBar progressBar;
+    ProgressBar mobileProgress;
     CardView mainCard;
     private static final String TAG  = "SOOFA";
     View mobileView, cardView, stkView,  successView;
@@ -102,6 +100,8 @@ public class SoofaCheckout extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar2);
         mobileProgress = findViewById(R.id.mobile_progress);
         mainCard = findViewById(R.id.details_card);
+        mainCard.setCardBackgroundColor(getResources().getColor(R.color.white_smoke));
+
         mainCard.setBackgroundResource(R.drawable.card_shape);
 
         businessName = findViewById(R.id.tv_business_name);
@@ -533,7 +533,7 @@ public class SoofaCheckout extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<TransactionResponse> call, Throwable t) {
-                        cancel();
+                        Toast.makeText(SoofaCheckout.this, "Unable to connect, check your connection", Toast.LENGTH_SHORT).show();
                         t.printStackTrace();
                     }
                 });
