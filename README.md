@@ -16,7 +16,7 @@ Add Jitpack to your project-level build.gradle file
 
 To add the library, paste this line to your app-level build.gradle file.
 
-```implementation 'com.qubeans.checkout:checkout:1.0.2```
+```implementation 'com.qubeans.checkout:checkout:1.0.10```
 
 
 Initiating soofa client
