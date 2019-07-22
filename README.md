@@ -2,6 +2,16 @@
 
 ![](https://github.com/soofapay/checkout-android/raw/master/sample-screenshot.jpg)
 
+Add Jitpack to your project-level build.gradle file
+
+```allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+  ```
+
 ## Library dependency
 
 To add the library, paste this line to your app-level build.gradle file.
