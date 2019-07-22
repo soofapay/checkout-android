@@ -81,8 +81,8 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Soofa.TRANSACTION_REQUEST_CODE && data != null){
             if (resultCode == Soofa.TRANSACTION_SUCCESSFUL){
-                val tId = data.getStringExtra("tid")
-                val reference = data.getStringArrayExtra("reference")
+                var tId = data.getStringExtra("tid")
+                var reference = data.getStringArrayExtra("reference")
                 Logger.getLogger("Response").warning("$tId $reference")
             }
         }
