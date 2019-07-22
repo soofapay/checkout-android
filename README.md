@@ -23,6 +23,8 @@ Initiating soofa client
 
 ## Usage
 
+### java
+
 ```java
 new Soofa(this,
           5002,
@@ -31,6 +33,18 @@ new Soofa(this,
   .create();
 
 ```
+
+### Kotlin
+
+```kotlin
+Soofa(this,
+      5002,
+      10.00,
+      "From Kotlin"
+       )
+       .create();
+    }
+  ```
 
 5002 - The business name, of type Double.
 
@@ -42,6 +56,7 @@ Domain -  the domain of the organization. To be added on allowed hosts from the 
 
 
   ## Usage
+  ### java
   ```java
 @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -60,6 +75,19 @@ Domain -  the domain of the organization. To be added on allowed hosts from the 
 
   }
 ```
+### kotlin
+```kotlin
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Soofa.TRANSACTION_REQUEST_CODE && data != null){
+            if (resultCode == Soofa.TRANSACTION_SUCCESSFUL){
+                val tId = data.getStringExtra("tid")
+                val reference = data.getStringArrayExtra("reference")
+                Logger.getLogger("Response").warning("$tId $reference")
+            }
+        }
+    }
+  ```
 
 ## Description
 
