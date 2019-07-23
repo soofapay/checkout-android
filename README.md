@@ -26,33 +26,20 @@ Initiating soofa client
 ### java
 
 ```java
-new Soofa(this,
-          5002,
-          amount,
-          reference)
-  .create();
-
+new Soofa(this, your_till_number, amount, reference).create();
 ```
 
 ### Kotlin
 
 ```kotlin
-Soofa(this,
-      5002,
-      10.00,
-      "From Kotlin"
-       )
-       .create();
-    }
-  ```
+Soofa(this, your_till_number, amount, reference).create();
+```
 
-5002 - The business name, of type Double.
+`your_till_number` - The business name, of type Double.
 
-This - the current Activity. 
+`this` - the current Activity. 
 
-Amount - amount for product, of Double type.
-
-Domain -  the domain of the organization. To be added on allowed hosts from the dashboard.
+`amount` - amount for product, of Double type.
 
 
   ## Usage
@@ -70,6 +57,7 @@ Domain -  the domain of the organization. To be added on allowed hosts from the 
                   String tId = data.getStringExtra("tid");
                   String reference = data.getStringExtra("reference");
                   Log.e(TAG, "onActivityResult: " + tId + " " + reference );
+		  // Submit to your server
           }
       }
 
@@ -84,6 +72,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                 var tId = data.getStringExtra("tid")
                 var reference = data.getStringArrayExtra("reference")
                 Logger.getLogger("Response").warning("$tId $reference")
+		// Submit to your server
             }
         }
     }
