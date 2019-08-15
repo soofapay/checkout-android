@@ -26,18 +26,18 @@ Initiating soofa client
 ### java
 
 ```java
-new Soofa(this, your_till_number, amount, reference).create();
+new Soofa(this, yourTillNumber, amount, reference).create();
 ```
 
 ### Kotlin
 
 ```kotlin
-Soofa(this, your_till_number, amount, reference).create();
+Soofa(this, yourTillNumber, amount, reference).create();
 ```
 
-`your_till_number` - The business name, of type Double.
+`yourTillNumber` - The business name, of type Double.
 
-`this` - the current Activity. 
+`this` - the current Activity. Use `getActivity()` inside a fragment. 
 
 `amount` - amount for product, of Double type.
 
