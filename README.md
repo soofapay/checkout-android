@@ -4,12 +4,14 @@
 
 Add Jitpack to your project-level build.gradle file
 
-```allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+```allprojects 
+{
+	...
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
 	}
+}
   ```
 
 ## Library dependency
