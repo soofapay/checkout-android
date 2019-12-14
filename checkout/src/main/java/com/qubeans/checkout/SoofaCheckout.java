@@ -38,12 +38,14 @@ import com.qubeans.checkout.models.CheckNumber;
 import com.qubeans.checkout.models.CheckTillResponse;
 import com.qubeans.checkout.models.CheckoutResponse;
 import com.qubeans.checkout.models.CheckoutTill;
+import com.qubeans.checkout.models.PayCard;
+import com.qubeans.checkout.models.PayData;
 import com.qubeans.checkout.models.PayRequest;
 import com.qubeans.checkout.models.PayResponse;
 import com.qubeans.checkout.models.Soofa;
 import com.qubeans.checkout.models.TransactionResponse;
 import com.qubeans.checkout.utils.CardTextWatcher;
-import com.qubeans.checkout.utils.CheckoutUtils;
+import com.qubeans.checkout.utils.CheckoutUtilsKt;
 import com.qubeans.checkout.utils.CreditCardExpiryTextWatcher;
 
 import org.json.JSONException;
@@ -85,7 +87,7 @@ public class SoofaCheckout extends AppCompatActivity {
     CheckView checkView;
     TextView businessName;
     CountryCodePicker cpp;
-    Button bPay;
+    Button bPay, bPayCard;
     RadioGroup radioGroup;
     RadioButton radioSoofa;
     RadioButton radioMpesa;
@@ -103,9 +105,11 @@ public class SoofaCheckout extends AppCompatActivity {
         mainCard.setCardBackgroundColor(getResources().getColor(R.color.white_smoke));
 
         mainCard.setBackgroundResource(R.drawable.card_shape);
+        etCvv = findViewById(R.id.card_cvv);
 
         businessName = findViewById(R.id.tv_business_name);
-        bPay = findViewById(com.qubeans.checkout.R.id.b_sumbit_pay);
+        bPay = findViewById(com.qubeans.checkout.R.id.b_submit_pay);
+        bPayCard = findViewById(R.id.bSubmit);
         tvWait = findViewById(R.id.tv_wait);
 
         radioGroup = findViewById(R.id.radio_group);
@@ -144,7 +148,8 @@ public class SoofaCheckout extends AppCompatActivity {
                     mainCard.setVisibility(View.VISIBLE);
                     businessName.setText(checkTillResponse.getTillName());
                     bPay.setText(String.format("Pay  %s %s", checkTillResponse.getCurrency(), checkTillResponse.getAmount()));
-                    showCard();
+
+                    showCard(String.format("Pay  %s %s", checkTillResponse.getCurrency(), checkTillResponse.getAmount()));
                 }
 
                 else  if (response.code() == 404){
@@ -186,7 +191,7 @@ public class SoofaCheckout extends AppCompatActivity {
 
     }
 
-    private void showCard() {
+    private void showCard(String amount) {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -288,10 +293,10 @@ public class SoofaCheckout extends AppCompatActivity {
                 etLastName.requestFocus();
                 return;
             }
-            CheckoutUtils.hideSoftKeyboard(this, getCurrentFocus());
+            CheckoutUtilsKt.hideSoftKeyboard(this, getCurrentFocus());
 
             Date date = new Date();
-            String checkoutToken = CheckoutUtils.genRandomString(20) + "-" + date.getTime();
+            String checkoutToken = CheckoutUtilsKt.genRandomString(20) + "-" + date.getTime();
 
             String requestAmount = String.valueOf(checkoutTill.getAmount());
 
@@ -324,6 +329,61 @@ public class SoofaCheckout extends AppCompatActivity {
 
             mobileView.setVisibility(View.GONE);
             cardView.setVisibility(View.VISIBLE);
+            bPayCard.setText(amount);
+
+            bPayCard.setOnClickListener(v1 -> {
+                String cardNumber = etcardNumber.getText().toString().trim().replace(" ", "");
+                if (cardNumber.isEmpty() || cardNumber.length()<16){
+                    etcardNumber.setError("check you card");
+                    etcardNumber.requestFocus();
+                    return;
+                }
+
+                String expiryDate = etExpiry.getText().toString().trim();
+                if (expiryDate.isEmpty()){
+                    etExpiry.setError("check this");
+                    etExpiry.requestFocus();
+                    return;
+                }
+
+                String cvvValue = etCvv.getText().toString().trim();
+                if (cvvValue.isEmpty()){
+                    etCvv.setError("check this");
+                    etCvv.requestFocus();
+                    return;
+                }
+
+                EditText etCountry = findViewById(R.id.etCountry);
+                String countryName = etCountry.getText().toString().trim();
+                if (countryName.isEmpty()){
+                    etCountry.setError("check this");
+                    etCountry.requestFocus();
+                    return;
+                }
+
+                EditText etPostal = findViewById(R.id.postalAddress);
+                String postalAddress = etPostal.getText().toString().trim();
+                if (postalAddress.isEmpty()){
+                    etPostal.setError("check this");
+                    etPostal.requestFocus();
+                    return;
+                }
+
+                EditText etStreet = findViewById(R.id.etStreet);
+                String streetAddress = etStreet.getText().toString().trim();
+                if (streetAddress.isEmpty()){
+                    etStreet.setError("check this");
+                    etStreet.requestFocus();
+                    return;
+                }
+
+                payWithCard(cardNumber, expiryDate, cvvValue, countryName, postalAddress, streetAddress, getPackageName(), checkoutTill.getAmount(), "MacBook Pro");
+
+
+
+
+
+            });
 
         });
 
@@ -450,7 +510,12 @@ public class SoofaCheckout extends AppCompatActivity {
         PayRequest payRequest = new PayRequest(phone.replace(" ", ""), firstName, lastName, checkoutToken, requestAmount, domainName, checkoutTill.getTill(), reference);
         mobileProgress.setVisibility(View.VISIBLE);
         bPay.setVisibility(View.GONE);
-        Call<CheckoutResponse> call = MobileClient.getInstance().getApi().payRequest(payRequest);
+
+        Gson gson = new Gson();
+        String payJson= gson.toJson(payRequest);
+        String data = CheckoutUtilsKt.encryptData(payJson);
+
+        Call<CheckoutResponse> call = MobileClient.getInstance().getApi().payRequest(new PayData(data));
         call.enqueue(new Callback<CheckoutResponse>() {
             @Override
             public void onResponse(Call<CheckoutResponse> call, Response<CheckoutResponse> response) {
@@ -552,13 +617,17 @@ public class SoofaCheckout extends AppCompatActivity {
     }
 
     private void payWithMobile(String phone, String firstName, String lastName, String checkoutToken, String requestAmount, String domainName, String reference) {
-        PayRequest payRequest = new PayRequest(phone.replace(" ", ""), firstName, lastName, checkoutToken, CheckoutUtils.formatToMoney(Double.parseDouble(requestAmount)), domainName, checkoutTill.getTill(), reference);
+        PayRequest payRequest = new PayRequest(phone.replace(" ", ""), firstName, lastName, checkoutToken, CheckoutUtilsKt.formatToMoney(Double.parseDouble(requestAmount)), domainName, checkoutTill.getTill(), reference);
         Log.e(TAG, "Domain name: " + domainName );
 
         mobileProgress.setVisibility(View.VISIBLE);
         bPay.setVisibility(View.GONE);
 
-        Call<CheckoutResponse> call = MobileClient.getInstance().getApi().payWithMobile(payRequest);
+        Gson gson = new Gson();
+        String payJson= gson.toJson(payRequest);
+        String data = CheckoutUtilsKt.encryptData(payJson);
+
+        Call<CheckoutResponse> call = MobileClient.getInstance().getApi().payWithMobile(new PayData(data));
         call.enqueue(new Callback<CheckoutResponse>() {
             @Override
             public void onResponse(Call<CheckoutResponse> call, Response<CheckoutResponse> response) {
@@ -593,6 +662,34 @@ public class SoofaCheckout extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void payWithCard(String cardNumber, String expiry, String cvvCode, String country, String postal, String street, String domainName, String requestAmount, String reference){
+
+        PayCard payCard = new PayCard(cardNumber, expiry, cvvCode, country, postal, street, requestAmount, reference, domainName, checkoutTill.getTill());
+
+        Gson gson = new Gson();
+        String modelToString = gson.toJson(payCard);
+
+        PayData payData = new PayData(CheckoutUtilsKt.encryptData(modelToString));
+
+        RetrofitClient.getInstance()
+                .getApi()
+                .payWithCard(payData)
+                .enqueue(new Callback<CheckoutResponse>() {
+                    @Override
+                    public void onResponse(Call<CheckoutResponse> call, Response<CheckoutResponse> response) {
+                        if (response.code() ==200){
+                            Toast.makeText(SoofaCheckout.this, "Successful", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CheckoutResponse> call, Throwable t) {
+
+                    }
+                });
 
     }
 

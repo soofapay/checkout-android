@@ -4,11 +4,10 @@ import com.qubeans.checkout.models.CheckNumber;
 import com.qubeans.checkout.models.CheckTillResponse;
 import com.qubeans.checkout.models.CheckoutResponse;
 import com.qubeans.checkout.models.CheckoutTill;
-import com.qubeans.checkout.models.PayRequest;
+import com.qubeans.checkout.models.PayData;
 import com.qubeans.checkout.models.PayResponse;
 import com.qubeans.checkout.models.TransactionResponse;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -18,12 +17,10 @@ import retrofit2.http.Path;
 public interface ApiClient {
 
     @POST("soofa/pay-requests/")
-    Call<CheckoutResponse> payRequest(@Body PayRequest payRequest);
+    Call<CheckoutResponse> payRequest(@Body PayData payData);
 
     @POST("core/transactions/MB/")
-    Call<CheckoutResponse> payWithMobile(@Body PayRequest payRequest);
-
-
+    Call<CheckoutResponse> payWithMobile(@Body PayData payData);
 
     @POST("core/core/checkout-number/")
     Call<PayResponse> checkNumber(@Body CheckNumber checkNumber);
@@ -33,6 +30,9 @@ public interface ApiClient {
 
     @GET("soofa/pay-requests/{id}")
     Call<TransactionResponse> checkResponse(@Path("id") String id);
+
+    @POST("transactions/transactions/CB/")
+    Call<CheckoutResponse> payWithCard(@Body PayData payData);
 
 }
 

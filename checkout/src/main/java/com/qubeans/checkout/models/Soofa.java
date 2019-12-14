@@ -1,7 +1,6 @@
 package com.qubeans.checkout.models;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -9,7 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.qubeans.checkout.R;
 import com.qubeans.checkout.SoofaCheckout;
-import com.qubeans.checkout.utils.CheckoutUtils;
+import com.qubeans.checkout.utils.CheckoutUtilsKt;
 
 import java.io.Serializable;
 
@@ -48,7 +47,7 @@ public class Soofa  implements Serializable {
 
     public Soofa(Activity activity, Integer tillNumber, Double amount, String reference) {
         this.tillNumber = tillNumber;
-        this.amount = CheckoutUtils.formatToMoney(amount);
+        this.amount = CheckoutUtilsKt.formatToMoney(amount);
         this.activity = activity;
         this.domain = activity.getApplicationContext().getPackageName();
         Log.e(TAG, "Soofa: " + this.domain);

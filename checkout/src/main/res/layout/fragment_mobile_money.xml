@@ -15,6 +15,8 @@
         android:background="@drawable/edit_text_shape_cornered"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         >
 
         <com.hbb20.CountryCodePicker
@@ -74,8 +76,8 @@
             android:hint="@string/first_name"
             android:inputType="textPersonName"
             android:background="@drawable/edit_text_shape_cornered"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:paddingLeft="8dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
@@ -95,8 +97,8 @@
             android:hint="@string/last_name"
             android:inputType="textPersonName"
             android:background="@drawable/edit_text_shape_cornered"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:paddingLeft="8dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
@@ -113,7 +115,7 @@
 
 
     <Button
-        android:id="@+id/b_sumbit_pay"
+        android:id="@+id/b_submit_pay"
         android:layout_width="0dp"
         android:layout_height="36dp"
         android:layout_marginTop="24dp"

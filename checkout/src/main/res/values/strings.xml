@@ -7,8 +7,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="card_number">Card Number</string>
-    <string name="mm_yyyy">mm/yyyy</string>
-    <string name="cvv">cvv</string>
+    <string name="mm_yyyy">MM/YYYY</string>
+    <string name="cvv">CVV</string>
     <string name="country">Country</string>
     <string name="postal_address">Postal address</string>
     <string name="street_address">street address</string>
