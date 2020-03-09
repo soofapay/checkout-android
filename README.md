@@ -21,9 +21,9 @@ To add the library, paste this line to your app-level build.gradle file.
 ```implementation 'com.qubeans.checkout:checkout:1.0.10'```
 
 
-Initiating soofa client
 
-## Usage
+## Initiating soofa client
+
 
 ### java
 
